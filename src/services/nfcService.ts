@@ -724,45 +724,32 @@ export async function resetNfcTag(
         await cleanup()
         reject(error)
       }
+      
+      let writing = false
 
       async function eraseCurrentTag(): Promise<void> {
-        if (completed) return
-
-        completed = true
+        if (completed || writing) return
+        writing = true
 
         try {
-          onProgress?.('Tag détecté. Effacement NDEF en cours…')
+          onProgress?.('Tag détecté. Garde-le immobile : effacement en cours…')
 
-          /*
-           * Le plugin écrit sur le dernier tag NFC détecté.
-           * Le tag doit rester contre le téléphone jusqu’au succès.
-           */
-          await CapacitorNfc.write({
-            records: [],
-          })
+          await CapacitorNfc.erase()
 
-          onProgress?.('Tag reset : le message NDEF a été effacé.')
+          completed = true
+          onProgress?.('Message NDEF effacé avec succès.')
           await cleanup()
           resolve()
         } catch (error) {
+          completed = true
           await cleanup()
 
-          const errorMessage =
-            error instanceof Error ? error.message : String(error)
-
-          if (/lost|connection/i.test(errorMessage)) {
-            reject(
-              new Error(
-                'Connexion NFC perdue. Garde le tag immobile contre le téléphone pendant tout le reset.',
-              ),
-            )
-            return
-          }
-
+          const message = error instanceof Error ? error.message : String(error)
           reject(
             new Error(
-              errorMessage ||
-                'Impossible d’effacer ce tag. Il est peut-être verrouillé, protégé ou non compatible NDEF.',
+              /lost|connection/i.test(message)
+                ? 'Connexion NFC perdue. Garde le tag contre le téléphone jusqu’à la confirmation.'
+                : message || 'Impossible d’effacer ce tag : vérifie qu’il est réinscriptible.',
             ),
           )
         }
