@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Redirection...</title>
+
+  <script>
+    (function () {
+      /*
+        Pour un site GitHub Pages de type :
+        https://daem0ns.github.io/Arntags/
+
+        Le premier segment à conserver est ArnTags.
+      */
+      // var pathSegmentsToKeep = 1
+
+      // var location = window.location
+      // var pathName = location.pathname
+      //   .split('/')
+      //   .slice(1)
+      // var keptPath = pathName.slice(0, pathSegmentsToKeep).join('/')
+      // var appPath = pathName.slice(pathSegmentsToKeep).join('/')
+
+      // var redirectUrl =
+      //   location.protocol +
+      //   '//' +
+      //   location.hostname +
+      //   (location.port ? ':' + location.port : '') +
+      //   '/' +
+      //   keptPath +
+      //   '/?redirect=' +
+      //   encodeURIComponent('/' + appPath + location.search + location.hash)
+
+      // window.location.replace(redirectUrl)
+      var base = '/Arntags/';
+      var path = window.location.pathname;
+      var search = window.location.search;
+      var hash = window.location.hash;
+
+      if (!path.startsWith(base)) {
+        window.location.replace(
+          base + search + hash,
+        );
+        return;
+      }
+
+      var route = path.slice(base.length);
+
+      var redirect =
+        base +
+        '?p=' +
+        encodeURIComponent('/' + route) +
+        '&q=' +
+        encodeURIComponent(search.slice(1)) +
+        '&h=' +
+        encodeURIComponent(hash.slice(1));
+
+      window.location.replace(redirect);
+    })()
+  </script>
+</head>
+
+<body>
+  <p>Chargement...</p>
+</body>
+
+</html>
