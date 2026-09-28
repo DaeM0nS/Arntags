@@ -138,6 +138,8 @@ export async function fetchArntrealProfile(
     },
   )
 
+  console.log(data);
+
   if (error) {
     throw error
   }

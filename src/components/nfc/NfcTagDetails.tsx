@@ -413,12 +413,12 @@ export default function NfcTagDetails({
                   </strong>
                 </div>
 
-                <div>
+                {/* <div>
                   <span>XP totale</span>
                   <strong>
                     {tag.profile_data.clothingXp.total?.toLocaleString('fr-FR') ?? '—'}
                   </strong>
-                </div>
+                </div> */}
               </div>
             </div>
           )}

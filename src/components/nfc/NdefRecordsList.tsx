@@ -28,7 +28,7 @@ export default function NdefRecordsList({ records }: NdefRecordsListProps): JSX.
           <span className="ndef-record__number">{String(index + 1).padStart(2, '0')}</span>
           <div className="ndef-record__content">
             <p className="ndef-record__type">{labelForRecord(record)}</p>
-            <p className="ndef-record__value">{contentForRecord(record)}</p>
+            <p className="ndef-record__value"><a href={contentForRecord(record)}>{contentForRecord(record)}</a></p>
           </div>
         </article>
       ))}
